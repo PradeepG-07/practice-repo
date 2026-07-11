@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Header
+from fastapi import FastAPI, Header, Body, Form, Request
 
 app = FastAPI()
 
@@ -70,3 +70,84 @@ def get_headers(
     request_headers["Content-Type"] = content_type
 
     return request_headers
+
+## Body
+## Add a book
+
+# 1. Body with JSON as Dict
+# @app.post("/books")
+# def add_a_book(payload: dict = Body({})) -> dict :
+#     book_name = payload.get("name")
+#     book_desc = payload.get("desc")
+#     book_genre = payload.get("genre")
+
+#     if book_name is None or book_desc is None or book_genre is None:
+#         return {
+#             "message": "Invalid Payload"
+#         }
+
+#     book_id = len(books) + 1
+#     book = {
+#         "id": book_id,
+#         "name" : book_name,
+#         "desc": book_desc,
+#         "genre": book_genre
+#     }
+
+#     books.append(book)
+
+#     return book
+
+# 2. Body with FormData
+# @app.post("/books")
+# def add_a_book(
+#     book_name: str = Form(None, alias="name"), 
+#     book_desc: str = Form(None, alias="desc"), 
+#     book_genre: str = Form(None, alias="genre")
+# ) -> dict :
+
+#     if book_name is None or book_desc is None or book_genre is None:
+#         return {
+#             "message": "Invalid Payload"
+#         }
+
+#     book_id = len(books) + 1
+#     book = {
+#         "id": book_id,
+#         "name" : book_name,
+#         "desc": book_desc,
+#         "genre": book_genre
+#     }
+
+#     books.append(book)
+
+#     return book
+
+# 3. Access raw request body
+@app.post("/books")
+async def add_a_book(
+    request: Request
+) -> dict :
+    
+    payload: dict = await request.json()
+
+    book_name = payload.get("name")
+    book_desc = payload.get("desc")
+    book_genre = payload.get("genre")
+
+    if book_name is None or book_desc is None or book_genre is None:
+        return {
+            "message": "Invalid Payload"
+        }
+
+    book_id = len(books) + 1
+    book = {
+        "id": book_id,
+        "name" : book_name,
+        "desc": book_desc,
+        "genre": book_genre
+    }
+
+    books.append(book)
+
+    return book
