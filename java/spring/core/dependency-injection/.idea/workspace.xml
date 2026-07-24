@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="cec6b505-7266-46b5-a493-7dad63ad439a" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../.idea/compiler.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/workspace.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../annotation_context/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../annotation_context/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../annotation_context/.idea/encodings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../annotation_context/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../annotation_context/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../annotation_context/pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../annotation_context/src/main/java/com/pradeep/annotation_context/AppConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../annotation_context/src/main/java/com/pradeep/annotation_context/ExternalModel.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../annotation_context/src/main/java/com/pradeep/annotation_context/Main.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../annotation_context/src/main/java/com/pradeep/annotation_context/Order.java" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../../../.." />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 0,
+  "fromUser": false
+}]]></component>
+  <component name="ProjectId" id="3GargrM8mY7yyctOWdGarenwjpn" />
+  <component name="ProjectViewState">
+    <option name="autoscrollToSource" value="true" />
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="openDirectoriesWithSingleClick" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "onboarding.tips.debug.path": "/home/pradeep/practice-workspace/java/spring/core/dependency-injection/src/main/java/com/pradeep/Main.java",
+    "settings.editor.selected.configurable": "com.poratu.idea.plugins.tomcat.setting.TomcatServersConfigurable"
+  }
+}]]></component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="cec6b505-7266-46b5-a493-7dad63ad439a" name="Changes" comment="" />
+      <created>1784220634423</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1784220634423</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>
