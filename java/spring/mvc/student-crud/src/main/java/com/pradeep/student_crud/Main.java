@@ -12,25 +12,29 @@ import java.io.File;
 
 public class Main {
     public static void main(String[] args) throws LifecycleException {
+        // Tomcat Config
         Tomcat tomcat = new Tomcat();
         tomcat.setPort(8000);
 
         tomcat.getConnector();
-
-        AnnotationConfigWebApplicationContext webApplicationContext
-                = new AnnotationConfigWebApplicationContext();
-        webApplicationContext.register(AppConfig.class);
 
         String contextPath = "/student-crud";
         String baseDoc = new File("src/main/java/webapps").getAbsolutePath();
 
         Context tomcatContext = tomcat.addContext(contextPath, baseDoc);
 
+        // IoC Container Config
+        AnnotationConfigWebApplicationContext webApplicationContext
+                = new AnnotationConfigWebApplicationContext();
+        webApplicationContext.register(AppConfig.class);
+
+        // Mvc Config - DispatcherServlet + Mapping
         DispatcherServlet dispatcherServlet = new DispatcherServlet(webApplicationContext);
 
         Tomcat.addServlet(tomcatContext, "dispatcherServlet", dispatcherServlet);
         tomcatContext.addServletMappingDecoded("/", "dispatcherServlet");
 
+        // Start tomcat and listen for http requests on port 8000
         tomcat.start();
 
         tomcat.getServer().await();
