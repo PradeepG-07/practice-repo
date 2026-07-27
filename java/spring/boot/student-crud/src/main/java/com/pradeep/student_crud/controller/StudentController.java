@@ -1,7 +1,11 @@
 package com.pradeep.student_crud.controller;
 
-import com.pradeep.student_crud.model.Student;
+import com.pradeep.student_crud.dto.request.CreateStudentRequestDto;
+import com.pradeep.student_crud.dto.response.GenericStudentResponseDto;
+import com.pradeep.student_crud.dto.request.UpdateStudentRequestDto;
+import com.pradeep.student_crud.dto.response.ApiResponseDto;
 import com.pradeep.student_crud.service.StudentService;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,43 +24,77 @@ public class StudentController {
     }
 
     @PostMapping
-    public ResponseEntity<Student> createStudent(@RequestBody Student student){
-        Optional<Student> createdStudent =
-                this.studentService.createStudent(student);
+    public ResponseEntity<ApiResponseDto<GenericStudentResponseDto>> createStudent(@RequestBody CreateStudentRequestDto studentRequest){
+        Optional<GenericStudentResponseDto> createdStudent = this.studentService.createStudent(studentRequest);
         if(createdStudent.isEmpty()){
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .build();
+            ApiResponseDto<GenericStudentResponseDto> apiResponseDto =
+                    ApiResponseDto.error(HttpStatus.CONFLICT, "Student already exists with given roll number.");
+
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(apiResponseDto);
         }
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdStudent.get());
+
+        ApiResponseDto<GenericStudentResponseDto> apiResponseDto =
+                ApiResponseDto.success(HttpStatus.CREATED, createdStudent.get(), "Student created successfully.");
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(apiResponseDto);
     }
 
     @GetMapping
-    public List<Student> getAllStudents(){
-        return this.studentService.getAllStudents();
+    public ResponseEntity<ApiResponseDto<List<GenericStudentResponseDto>>> getAllStudents(){
+        List<GenericStudentResponseDto> studentList =  this.studentService.getAllStudents();
+
+        ApiResponseDto<List<GenericStudentResponseDto>> apiResponseDto =
+                ApiResponseDto.success(studentList, "Students fetched successfully.");
+
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponseDto);
     }
 
     @GetMapping("/{rollNumber}")
-    public ResponseEntity<Student> getStudent(@PathVariable Long rollNumber){
-        Optional<Student> student = this.studentService.getStudent(rollNumber);
-        if(student.isEmpty())
-            return ResponseEntity.notFound().build();
-        return ResponseEntity.ok(student.get());
+    public ResponseEntity<ApiResponseDto<GenericStudentResponseDto>> getStudent(@PathVariable Long rollNumber){
+        Optional<GenericStudentResponseDto> student = this.studentService.getStudent(rollNumber);
+
+        if(student.isEmpty()){
+            ApiResponseDto<GenericStudentResponseDto> apiResponseDto =
+                    ApiResponseDto.error(HttpStatus.NOT_FOUND, "Student not found.");
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponseDto);
+        }
+
+        ApiResponseDto<GenericStudentResponseDto> apiResponseDto =
+                ApiResponseDto.success(student.get(), "Student fetched successfully.");
+        return ResponseEntity.ok(apiResponseDto);
     }
 
     @PutMapping("/{rollNumber}")
-    public ResponseEntity<Student> updateStudent(@PathVariable Long rollNumber,
-                                                 @RequestBody Student studentReq){
-        Optional<Student> student = this.studentService.updateStudent(rollNumber, studentReq);
-        if(student.isEmpty())
-            return ResponseEntity.notFound().build();
-        return ResponseEntity.ok(student.get());
+    public ResponseEntity<ApiResponseDto<GenericStudentResponseDto>> updateStudent(@PathVariable Long rollNumber,
+                                                 @RequestBody UpdateStudentRequestDto studentReq){
+        Optional<GenericStudentResponseDto> student = this.studentService.updateStudent(rollNumber, studentReq);
+
+        if(student.isEmpty()){
+            ApiResponseDto<GenericStudentResponseDto> apiResponseDto =
+                    ApiResponseDto.error(HttpStatus.NOT_FOUND, "Student not found.");
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponseDto);
+        }
+
+        ApiResponseDto<GenericStudentResponseDto> apiResponseDto =
+                    ApiResponseDto.success(student.get(), "Student updated successfully.");
+        return ResponseEntity.ok(apiResponseDto);
     }
 
     @DeleteMapping("/{rollNumber}")
-    public ResponseEntity<String> deleteStudent(@PathVariable Long rollNumber){
+    public ResponseEntity<ApiResponseDto<Void>> deleteStudent(@PathVariable Long rollNumber){
         Boolean isStudentDeleted = this.studentService.deleteStudent(rollNumber);
-        if(isStudentDeleted == false)
-            return ResponseEntity.notFound().build();
-        return ResponseEntity.noContent().build();
+
+        if(isStudentDeleted == false){
+            ApiResponseDto<Void> apiResponseDto =
+                    ApiResponseDto.error(HttpStatus.NOT_FOUND, null, "Student not found.");
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponseDto);
+        }
+        ApiResponseDto<Void> apiResponseDto =
+                ApiResponseDto.success(HttpStatus.NO_CONTENT, null, "Student deleted successfully");
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(apiResponseDto);
     }
 }
