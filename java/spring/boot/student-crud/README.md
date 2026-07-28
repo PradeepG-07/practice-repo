@@ -39,5 +39,5 @@ curl -v -X PUT http://localhost:8080/api/students/1 \
 curl -v -X DELETE http://localhost:8080/api/students/1
 ```
 ## TODO
-- [ ] Use appropriate DTOs
+- [x] Use appropriate DTOs
 - [ ] Handle validations with `spring-boot-starter-validation`

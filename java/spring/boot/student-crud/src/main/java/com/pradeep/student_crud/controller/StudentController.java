@@ -6,6 +6,8 @@ import com.pradeep.student_crud.dto.request.UpdateStudentRequestDto;
 import com.pradeep.student_crud.dto.response.ApiResponseDto;
 import com.pradeep.student_crud.service.StudentService;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +26,7 @@ public class StudentController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponseDto<GenericStudentResponseDto>> createStudent(@RequestBody CreateStudentRequestDto studentRequest){
+    public ResponseEntity<ApiResponseDto<GenericStudentResponseDto>> createStudent(@Valid @RequestBody CreateStudentRequestDto studentRequest){
         Optional<GenericStudentResponseDto> createdStudent = this.studentService.createStudent(studentRequest);
         if(createdStudent.isEmpty()){
             ApiResponseDto<GenericStudentResponseDto> apiResponseDto =
@@ -50,7 +52,7 @@ public class StudentController {
     }
 
     @GetMapping("/{rollNumber}")
-    public ResponseEntity<ApiResponseDto<GenericStudentResponseDto>> getStudent(@PathVariable Long rollNumber){
+    public ResponseEntity<ApiResponseDto<GenericStudentResponseDto>> getStudent(@Valid @NotNull(message = "Roll number cannot be null.") @PathVariable Long rollNumber){
         Optional<GenericStudentResponseDto> student = this.studentService.getStudent(rollNumber);
 
         if(student.isEmpty()){
@@ -66,8 +68,8 @@ public class StudentController {
     }
 
     @PutMapping("/{rollNumber}")
-    public ResponseEntity<ApiResponseDto<GenericStudentResponseDto>> updateStudent(@PathVariable Long rollNumber,
-                                                 @RequestBody UpdateStudentRequestDto studentReq){
+    public ResponseEntity<ApiResponseDto<GenericStudentResponseDto>> updateStudent(@Valid @NotNull(message = "Roll number cannot be null.") @PathVariable Long rollNumber,
+                                                 @Valid @RequestBody UpdateStudentRequestDto studentReq){
         Optional<GenericStudentResponseDto> student = this.studentService.updateStudent(rollNumber, studentReq);
 
         if(student.isEmpty()){
@@ -83,7 +85,7 @@ public class StudentController {
     }
 
     @DeleteMapping("/{rollNumber}")
-    public ResponseEntity<ApiResponseDto<Void>> deleteStudent(@PathVariable Long rollNumber){
+    public ResponseEntity<ApiResponseDto<Void>> deleteStudent(@Valid @NotNull(message = "Roll number cannot be null.")@PathVariable Long rollNumber){
         Boolean isStudentDeleted = this.studentService.deleteStudent(rollNumber);
 
         if(isStudentDeleted == false){

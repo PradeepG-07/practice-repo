@@ -1,12 +1,27 @@
 package com.pradeep.student_crud.dto.request;
 
+import jakarta.validation.constraints.*;
+
 import java.util.List;
 
 public class CreateStudentRequestDto {
+    @NotNull(message = "Roll Number cannot be null.")
     private Long rollNumber;
+
+    @NotBlank(message = "Name cannot be null or empty or blank.")
     private String name;
+
+    @NotBlank(message = "Email cannot be blank.")
+    @Email(message = "Email is not valid.")
     private String email;
+
+    @NotNull(message = "Age cannot be null.")
+    @Positive(message = "Age must be positive.")
+    @Min(value = 4, message = "Age must be between 3 and 26.")
+    @Max(value = 25, message = "Age must be between 3 and 26.")
     private Integer age;
+
+    @NotNull(message = "Skills cannot be null.")
     private List<String> skills;
 
     public Long getRollNumber() {
