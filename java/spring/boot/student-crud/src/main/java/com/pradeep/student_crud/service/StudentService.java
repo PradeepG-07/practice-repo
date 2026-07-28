@@ -3,6 +3,8 @@ package com.pradeep.student_crud.service;
 import com.pradeep.student_crud.dto.request.CreateStudentRequestDto;
 import com.pradeep.student_crud.dto.response.GenericStudentResponseDto;
 import com.pradeep.student_crud.dto.request.UpdateStudentRequestDto;
+import com.pradeep.student_crud.exception.DuplicateResourceException;
+import com.pradeep.student_crud.exception.ResourceNotFoundException;
 import com.pradeep.student_crud.model.Student;
 import com.pradeep.student_crud.repository.StudentRepository;
 import org.springframework.stereotype.Service;
@@ -19,46 +21,42 @@ public class StudentService {
         this.studentRepository = studentRepository;
     }
 
-    public Optional<GenericStudentResponseDto> createStudent(CreateStudentRequestDto studentRequest){
+    public GenericStudentResponseDto createStudent(CreateStudentRequestDto studentRequest){
         Student existingStudent =
                 this.studentRepository.getStudent(studentRequest.getRollNumber());
-        if(existingStudent != null){
-            return Optional.empty();
-        }
+
+        if(existingStudent != null)
+            throw new DuplicateResourceException(
+                    String.format("Student already exists with %s roll number.", existingStudent.getRollNumber())
+            );
 
         Student student = mapToModel(studentRequest);
         Student createdStudent = this.studentRepository.createStudent(student);
 
-        if(createdStudent == null)
-            return Optional.empty();
-
         GenericStudentResponseDto responseDto = mapToResponseDto(createdStudent);
-        return Optional.of(responseDto);
+        return responseDto;
     }
 
-    public Optional<GenericStudentResponseDto> updateStudent(Long rollNumber,
+    public GenericStudentResponseDto updateStudent(Long rollNumber,
                                                              UpdateStudentRequestDto studentRequest){
         Student existingStudent =
                 this.studentRepository.getStudent(rollNumber);
-        if(existingStudent == null){
-            return Optional.empty();
-        }
+        if(existingStudent == null)
+            throw new ResourceNotFoundException(String.format("Student with roll number %d not found.", rollNumber));
 
         Student student = mapToModel(existingStudent, studentRequest);
         Student updatedStudent = this.studentRepository.updateStudent(rollNumber, student);
 
-        if(updatedStudent == null)
-            return Optional.empty();
-
         GenericStudentResponseDto responseDto = mapToResponseDto(updatedStudent);
-        return Optional.of(responseDto);
+        return responseDto;
     }
 
-    public Optional<GenericStudentResponseDto> getStudent(Long rollNumber){
+    public GenericStudentResponseDto getStudent(Long rollNumber){
         Student student = this.studentRepository.getStudent(rollNumber);
         if(student == null)
-            return Optional.empty();
-        return Optional.of(mapToResponseDto(student));
+            throw new ResourceNotFoundException(String.format("Student with roll number %d not found.", rollNumber));
+        GenericStudentResponseDto responseDto = mapToResponseDto(student);
+        return responseDto;
     }
 
     public List<GenericStudentResponseDto> getAllStudents(){
@@ -68,14 +66,14 @@ public class StudentService {
                 .toList();
     }
 
-    public Boolean deleteStudent(Long rollNumber){
+    public void deleteStudent(Long rollNumber){
         Student existingStudent =
                 this.studentRepository.getStudent(rollNumber);
 
         if(existingStudent == null)
-            return  false;
+            throw new ResourceNotFoundException(String.format("Student with roll number %d not found.", rollNumber));
 
-        return this.studentRepository.deleteStudent(rollNumber);
+        this.studentRepository.deleteStudent(rollNumber);
     }
 
     private Student mapToModel(CreateStudentRequestDto studentRequestDto){

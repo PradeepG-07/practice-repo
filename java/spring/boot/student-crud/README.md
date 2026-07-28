@@ -40,4 +40,6 @@ curl -v -X DELETE http://localhost:8080/api/students/1
 ```
 ## TODO
 - [x] Use appropriate DTOs
-- [ ] Handle validations with `spring-boot-starter-validation`
+- [x] Handle validations with `spring-boot-starter-validation`
+- [x] Add Proper Exception Handling
+- [ ] Add mapper classes

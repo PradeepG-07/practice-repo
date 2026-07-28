@@ -27,16 +27,10 @@ public class StudentController {
 
     @PostMapping
     public ResponseEntity<ApiResponseDto<GenericStudentResponseDto>> createStudent(@Valid @RequestBody CreateStudentRequestDto studentRequest){
-        Optional<GenericStudentResponseDto> createdStudent = this.studentService.createStudent(studentRequest);
-        if(createdStudent.isEmpty()){
-            ApiResponseDto<GenericStudentResponseDto> apiResponseDto =
-                    ApiResponseDto.error(HttpStatus.CONFLICT, "Student already exists with given roll number.");
-
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(apiResponseDto);
-        }
+        GenericStudentResponseDto createdStudent = this.studentService.createStudent(studentRequest);
 
         ApiResponseDto<GenericStudentResponseDto> apiResponseDto =
-                ApiResponseDto.success(HttpStatus.CREATED, createdStudent.get(), "Student created successfully.");
+                ApiResponseDto.success(HttpStatus.CREATED, createdStudent, "Student created successfully.");
 
         return ResponseEntity.status(HttpStatus.CREATED).body(apiResponseDto);
     }
@@ -53,49 +47,31 @@ public class StudentController {
 
     @GetMapping("/{rollNumber}")
     public ResponseEntity<ApiResponseDto<GenericStudentResponseDto>> getStudent(@Valid @NotNull(message = "Roll number cannot be null.") @PathVariable Long rollNumber){
-        Optional<GenericStudentResponseDto> student = this.studentService.getStudent(rollNumber);
-
-        if(student.isEmpty()){
-            ApiResponseDto<GenericStudentResponseDto> apiResponseDto =
-                    ApiResponseDto.error(HttpStatus.NOT_FOUND, "Student not found.");
-
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponseDto);
-        }
+        GenericStudentResponseDto student = this.studentService.getStudent(rollNumber);
 
         ApiResponseDto<GenericStudentResponseDto> apiResponseDto =
-                ApiResponseDto.success(student.get(), "Student fetched successfully.");
+                ApiResponseDto.success(student, "Student fetched successfully.");
+
         return ResponseEntity.ok(apiResponseDto);
     }
 
     @PutMapping("/{rollNumber}")
     public ResponseEntity<ApiResponseDto<GenericStudentResponseDto>> updateStudent(@Valid @NotNull(message = "Roll number cannot be null.") @PathVariable Long rollNumber,
                                                  @Valid @RequestBody UpdateStudentRequestDto studentReq){
-        Optional<GenericStudentResponseDto> student = this.studentService.updateStudent(rollNumber, studentReq);
-
-        if(student.isEmpty()){
-            ApiResponseDto<GenericStudentResponseDto> apiResponseDto =
-                    ApiResponseDto.error(HttpStatus.NOT_FOUND, "Student not found.");
-
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponseDto);
-        }
+        GenericStudentResponseDto updatedStudent = this.studentService.updateStudent(rollNumber, studentReq);
 
         ApiResponseDto<GenericStudentResponseDto> apiResponseDto =
-                    ApiResponseDto.success(student.get(), "Student updated successfully.");
+                    ApiResponseDto.success(updatedStudent, "Student updated successfully.");
+
         return ResponseEntity.ok(apiResponseDto);
     }
 
     @DeleteMapping("/{rollNumber}")
-    public ResponseEntity<ApiResponseDto<Void>> deleteStudent(@Valid @NotNull(message = "Roll number cannot be null.")@PathVariable Long rollNumber){
-        Boolean isStudentDeleted = this.studentService.deleteStudent(rollNumber);
+    public ResponseEntity<ApiResponseDto<Void>> deleteStudent(@Valid @NotNull(message = "Roll number cannot be null.") @PathVariable Long rollNumber){
+        this.studentService.deleteStudent(rollNumber);
 
-        if(isStudentDeleted == false){
-            ApiResponseDto<Void> apiResponseDto =
-                    ApiResponseDto.error(HttpStatus.NOT_FOUND, null, "Student not found.");
-
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponseDto);
-        }
         ApiResponseDto<Void> apiResponseDto =
-                ApiResponseDto.success(HttpStatus.NO_CONTENT, null, "Student deleted successfully");
+                ApiResponseDto.success(HttpStatus.NO_CONTENT, null, "Student deleted successfully.");
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(apiResponseDto);
     }
